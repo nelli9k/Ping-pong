@@ -40,11 +40,14 @@ background = transform.scale(image.load(background), (700,500))
 
 speed_ball_x = 15
 speed_ball_y = 15
+caught = 0
+caught2 = 0
 
 finish = False
 run = True
 
 font.init()
+font1 = font.SysFont("Arial", 25)
 font = font.SysFont("Arial", 70)
 lost1 = font.render("PLAYER 1 LOST", True, (0,0,128))
 lost2 = font.render("PLAYER 2 LOST", True, (0,0,128))
@@ -61,12 +64,33 @@ while run:
 
         if ball.rect.y >= 500-50 or ball.rect.y <= 0:
             speed_ball_y = speed_ball_y * -1
+            
 
-        if sprite.collide_rect(tenis_rocket, ball) or sprite.collide_rect(tenis_rocket2, ball):
+        if sprite.collide_rect(tenis_rocket, ball):
             speed_ball_x = speed_ball_x * -1
-
-        window.blit(background, (0,0))
+            caught = caught + 1
+            
+        if sprite.collide_rect(tenis_rocket2, ball):
+            speed_ball_x = speed_ball_x * -1
+            caught2 = caught2 + 1
         
+        window.blit(background, (0,0))
+        counter1 = font1.render("Bounced by 1player: " + str(caught), True, (0,0,128))
+        window.blit(counter1, (10, 20))
+
+        counter1 = font1.render("Bounced by 2player : " + str(caught2), True, (0,0,128))
+        window.blit(counter1, (450, 20))
+        
+        if caught == 15 and caught2 < 15:
+            win1 = font.render("PLAYER 1 WON", True, (0,0,128))
+            window.blit(win1, (125, 200))
+            finish = True
+
+        if caught2 == 15 and caught < 15:
+            win2 = font.render("PLAYER 2 WON", True, (0,0,128))
+            window.blit(win2, (125, 200))
+            finish = True
+       
         if ball.rect.x <= 0:
             window.blit(lost1, (125, 200))
             finish = True
