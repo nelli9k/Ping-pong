@@ -24,21 +24,22 @@ class Player(GameSprite):
             self.rect.y = self.rect.y - self.speed
         if keys[K_s] and self.rect.y < 300:
             self.rect.y = self.rect.y + self.speed
-
-class Player2(GameSprite):
-    def update(self):
+    def update_r(self):
         keys = key.get_pressed()
         if keys[K_UP] and self.rect.y > 5:
             self.rect.y = self.rect.y - self.speed
         if keys[K_DOWN] and self.rect.y < 300:
             self.rect.y = self.rect.y + self.speed
 
-ball = GameSprite(ball, 200, 200, 50, 50, 0)
-tenis_rocket = Player(tennis_r, 50, 200, 75, 200, 12)
-tenis_rocket2 = Player2(tennis_r, 550, 200, 75, 200, 12)
+ball = GameSprite(ball, 200, 200, 50, 50, 15)
+tenis_rocket = Player(tennis_r, 50, 200, 75, 200, 15)
+tenis_rocket2 = Player(tennis_r, 550, 200, 75, 200, 15)
 window = display.set_mode((700,500))
 display.set_caption("Shooter")
 background = transform.scale(image.load(background), (700,500))
+
+speed_ball_x = 15
+speed_ball_y = 15
 
 finish = False
 run = True
@@ -48,12 +49,21 @@ while run:
         if e.type == QUIT:
             run = False
     if not finish:
-        window.blit(background, (0,0))
+        ball.rect.x = ball.rect.x + speed_ball_x
+        ball.rect.y = ball.rect.y + speed_ball_y
 
+        if ball.rect.y >= 500-50 or ball.rect.y <= 0:
+            speed_ball_y = speed_ball_y * -1
+
+        if sprite.collide_rect(tenis_rocket, ball) or sprite.collide_rect(tenis_rocket2, ball):
+            speed_ball_x = speed_ball_x * -1
+
+        window.blit(background, (0,0))
+        
         ball.reset()
         tenis_rocket.update()
         tenis_rocket.reset()
-        tenis_rocket2.update()
+        tenis_rocket2.update_r()
         tenis_rocket2.reset()
 
         display.update()
