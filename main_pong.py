@@ -44,11 +44,18 @@ speed_ball_y = 15
 finish = False
 run = True
 
+font.init()
+font = font.SysFont("Arial", 70)
+lost1 = font.render("PLAYER 1 LOST", True, (0,0,128))
+lost2 = font.render("PLAYER 2 LOST", True, (0,0,128))
+
 while run:
     for e in event.get():
         if e.type == QUIT:
             run = False
+
     if not finish:
+
         ball.rect.x = ball.rect.x + speed_ball_x
         ball.rect.y = ball.rect.y + speed_ball_y
 
@@ -60,6 +67,14 @@ while run:
 
         window.blit(background, (0,0))
         
+        if ball.rect.x <= 0:
+            window.blit(lost1, (125, 200))
+            finish = True
+        
+        if ball.rect.x == 650:
+            window.blit(lost2, (125, 200))
+            finish = True
+
         ball.reset()
         tenis_rocket.update()
         tenis_rocket.reset()
